@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>
+        <input type="text" id="message">
+        <input type="submit" value="Send message" id="send_btn">
+    </p>
+
+    <p>
+        <textarea id="text" rows="20" cols="40"></textarea>
+    </p>
+
+</body>
+
+<script>
+    let sock;
+    sock = new WebSocket('ws://localhost:8080/ws');
+
+    document.getElementById("send_btn").onclick = function () {
+        sock.send(document.getElementById("message").value);
+    };
+
+    sock.onopen = function () {
+        console.log('Connection to server started');
+    };
+
+    sock.onmessage = function(event) {
+        console.log(event.data);
+        document.getElementById("text").value += event.data + "\n";
+    };
+
+    sock.onclose = function(event){
+        if (event.wasClean) {
+            console.log('Clean connection end');
+        } else {
+            console.warn('Connection broken');
+        }
+    };
+
+    sock.onerror = function(error){
+        console.error(error);
+    }
+</script>
+</html>

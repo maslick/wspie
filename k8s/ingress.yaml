@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wspie
+  labels:
+    maintainer: maslick
+    project: sandbox
+    app: wspie
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: wspie.maslick.ru
+    http:
+      paths:
+      - backend:
+          serviceName: wspie
+          servicePort: 8080
+        path: /
